@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="24a57e1633ea4c0bb9d051700ec70b52" Name="Diagram1" ZoomLevel="47">
+        <EntityTypeShape EntityType="App_MonitorModel.AppIncident" Width="2.5" PointX="2.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="App_MonitorModel.ApplicationLookup" Width="2.5" PointX="3.125" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="App_MonitorModel.AppMonitorDataset" Width="3.125" PointX="5.875" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="App_MonitorModel.JobLookup" Width="2.625" PointX="7.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="App_MonitorModel.ScheduleTypeLookup" Width="2.5" PointX="7.25" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="App_MonitorModel.sysdiagram" Width="1.5" PointX="25.375" PointY="3.125" IsExpanded="true" />
+        <AssociationConnector Association="App_MonitorModel.FK_AppIncidents_ApplicationLookup" ManuallyRouted="false" />
+        <AssociationConnector Association="App_MonitorModel.FK_AppMonitorDataset_ApplicationLookup" ManuallyRouted="false" />
+        <AssociationConnector Association="App_MonitorModel.FK_JobLookup_ApplicationLookup" ManuallyRouted="false" />
+        <AssociationConnector Association="App_MonitorModel.FK_AppMonitorDataset_AppMonitorDataset" ManuallyRouted="false" />
+        <AssociationConnector Association="App_MonitorModel.FK_JobLookup_ScheduleTypeLookup" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

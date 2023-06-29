@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="App_MonitorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AppIncidents">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="IncidentNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatedOn" Type="date" Nullable="false" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="ScheduleTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ApplicationLookup">
+          <Key>
+            <PropertyRef Name="ApplicationId" />
+          </Key>
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="ApplicationName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Owner" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Active" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AppMonitorDataset">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="JobID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StartTime" Type="date" Nullable="false" />
+          <Property Name="EndTime" Type="date" Nullable="false" />
+          <Property Name="Runtime" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobLookup">
+          <Key>
+            <PropertyRef Name="JobID" />
+          </Key>
+          <Property Name="ApplicationID" Type="int" Nullable="false" />
+          <Property Name="JobID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="JobName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaximumRuntime" Type="smallint" Nullable="false" />
+          <Property Name="ScheduleTypeId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScheduleTypeLookup">
+          <Key>
+            <PropertyRef Name="ScheduleTypeId" />
+          </Key>
+          <Property Name="ScheduleTypeId" Type="int" Nullable="false" />
+          <Property Name="ScheduleTypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_AppIncidents_ApplicationLookup">
+          <End Role="ApplicationLookup" Type="Self.ApplicationLookup" Multiplicity="1" />
+          <End Role="AppIncidents" Type="Self.AppIncidents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationLookup">
+              <PropertyRef Name="ApplicationId" />
+            </Principal>
+            <Dependent Role="AppIncidents">
+              <PropertyRef Name="ApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppMonitorDataset_ApplicationLookup">
+          <End Role="ApplicationLookup" Type="Self.ApplicationLookup" Multiplicity="1" />
+          <End Role="AppMonitorDataset" Type="Self.AppMonitorDataset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationLookup">
+              <PropertyRef Name="ApplicationId" />
+            </Principal>
+            <Dependent Role="AppMonitorDataset">
+              <PropertyRef Name="ApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppMonitorDataset_AppMonitorDataset">
+          <End Role="AppMonitorDataset" Type="Self.AppMonitorDataset" Multiplicity="1" />
+          <End Role="AppMonitorDataset1" Type="Self.AppMonitorDataset" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AppMonitorDataset">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AppMonitorDataset1">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobLookup_ApplicationLookup">
+          <End Role="ApplicationLookup" Type="Self.ApplicationLookup" Multiplicity="1" />
+          <End Role="JobLookup" Type="Self.JobLookup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationLookup">
+              <PropertyRef Name="ApplicationId" />
+            </Principal>
+            <Dependent Role="JobLookup">
+              <PropertyRef Name="ApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobLookup_ScheduleTypeLookup">
+          <End Role="ScheduleTypeLookup" Type="Self.ScheduleTypeLookup" Multiplicity="1" />
+          <End Role="JobLookup" Type="Self.JobLookup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScheduleTypeLookup">
+              <PropertyRef Name="ScheduleTypeId" />
+            </Principal>
+            <Dependent Role="JobLookup">
+              <PropertyRef Name="ScheduleTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="App_MonitorModelStoreContainer">
+          <EntitySet Name="AppIncidents" EntityType="Self.AppIncidents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApplicationLookup" EntityType="Self.ApplicationLookup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppMonitorDataset" EntityType="Self.AppMonitorDataset" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobLookup" EntityType="Self.JobLookup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScheduleTypeLookup" EntityType="Self.ScheduleTypeLookup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AppIncidents_ApplicationLookup" Association="Self.FK_AppIncidents_ApplicationLookup">
+            <End Role="ApplicationLookup" EntitySet="ApplicationLookup" />
+            <End Role="AppIncidents" EntitySet="AppIncidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppMonitorDataset_ApplicationLookup" Association="Self.FK_AppMonitorDataset_ApplicationLookup">
+            <End Role="ApplicationLookup" EntitySet="ApplicationLookup" />
+            <End Role="AppMonitorDataset" EntitySet="AppMonitorDataset" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppMonitorDataset_AppMonitorDataset" Association="Self.FK_AppMonitorDataset_AppMonitorDataset">
+            <End Role="AppMonitorDataset" EntitySet="AppMonitorDataset" />
+            <End Role="AppMonitorDataset1" EntitySet="AppMonitorDataset" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobLookup_ApplicationLookup" Association="Self.FK_JobLookup_ApplicationLookup">
+            <End Role="ApplicationLookup" EntitySet="ApplicationLookup" />
+            <End Role="JobLookup" EntitySet="JobLookup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobLookup_ScheduleTypeLookup" Association="Self.FK_JobLookup_ScheduleTypeLookup">
+            <End Role="ScheduleTypeLookup" EntitySet="ScheduleTypeLookup" />
+            <End Role="JobLookup" EntitySet="JobLookup" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="App_MonitorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AppIncident">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="IncidentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="ScheduleTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ApplicationLookup" Relationship="Self.FK_AppIncidents_ApplicationLookup" FromRole="AppIncidents" ToRole="ApplicationLookup" />
+        </EntityType>
+        <EntityType Name="ApplicationLookup">
+          <Key>
+            <PropertyRef Name="ApplicationId" />
+          </Key>
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Owner" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Active" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AppIncidents" Relationship="Self.FK_AppIncidents_ApplicationLookup" FromRole="ApplicationLookup" ToRole="AppIncidents" />
+          <NavigationProperty Name="AppMonitorDatasets" Relationship="Self.FK_AppMonitorDataset_ApplicationLookup" FromRole="ApplicationLookup" ToRole="AppMonitorDataset" />
+          <NavigationProperty Name="JobLookups" Relationship="Self.FK_JobLookup_ApplicationLookup" FromRole="ApplicationLookup" ToRole="JobLookup" />
+        </EntityType>
+        <EntityType Name="AppMonitorDataset">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="JobID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Runtime" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ApplicationLookup" Relationship="Self.FK_AppMonitorDataset_ApplicationLookup" FromRole="AppMonitorDataset" ToRole="ApplicationLookup" />
+          <NavigationProperty Name="AppMonitorDataset1" Relationship="Self.FK_AppMonitorDataset_AppMonitorDataset" FromRole="AppMonitorDataset" ToRole="AppMonitorDataset1" />
+          <NavigationProperty Name="AppMonitorDataset2" Relationship="Self.FK_AppMonitorDataset_AppMonitorDataset" FromRole="AppMonitorDataset1" ToRole="AppMonitorDataset" />
+        </EntityType>
+        <EntityType Name="JobLookup">
+          <Key>
+            <PropertyRef Name="JobID" />
+          </Key>
+          <Property Name="ApplicationID" Type="Int32" Nullable="false" />
+          <Property Name="JobID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="JobName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaximumRuntime" Type="Int16" Nullable="false" />
+          <Property Name="ScheduleTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ApplicationLookup" Relationship="Self.FK_JobLookup_ApplicationLookup" FromRole="JobLookup" ToRole="ApplicationLookup" />
+          <NavigationProperty Name="ScheduleTypeLookup" Relationship="Self.FK_JobLookup_ScheduleTypeLookup" FromRole="JobLookup" ToRole="ScheduleTypeLookup" />
+        </EntityType>
+        <EntityType Name="ScheduleTypeLookup">
+          <Key>
+            <PropertyRef Name="ScheduleTypeId" />
+          </Key>
+          <Property Name="ScheduleTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ScheduleTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="JobLookups" Relationship="Self.FK_JobLookup_ScheduleTypeLookup" FromRole="ScheduleTypeLookup" ToRole="JobLookup" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_AppIncidents_ApplicationLookup">
+          <End Role="ApplicationLookup" Type="Self.ApplicationLookup" Multiplicity="1" />
+          <End Role="AppIncidents" Type="Self.AppIncident" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationLookup">
+              <PropertyRef Name="ApplicationId" />
+            </Principal>
+            <Dependent Role="AppIncidents">
+              <PropertyRef Name="ApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppMonitorDataset_ApplicationLookup">
+          <End Role="ApplicationLookup" Type="Self.ApplicationLookup" Multiplicity="1" />
+          <End Role="AppMonitorDataset" Type="Self.AppMonitorDataset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationLookup">
+              <PropertyRef Name="ApplicationId" />
+            </Principal>
+            <Dependent Role="AppMonitorDataset">
+              <PropertyRef Name="ApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobLookup_ApplicationLookup">
+          <End Role="ApplicationLookup" Type="Self.ApplicationLookup" Multiplicity="1" />
+          <End Role="JobLookup" Type="Self.JobLookup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationLookup">
+              <PropertyRef Name="ApplicationId" />
+            </Principal>
+            <Dependent Role="JobLookup">
+              <PropertyRef Name="ApplicationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppMonitorDataset_AppMonitorDataset">
+          <End Role="AppMonitorDataset" Type="Self.AppMonitorDataset" Multiplicity="1" />
+          <End Role="AppMonitorDataset1" Type="Self.AppMonitorDataset" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AppMonitorDataset">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AppMonitorDataset1">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobLookup_ScheduleTypeLookup">
+          <End Role="ScheduleTypeLookup" Type="Self.ScheduleTypeLookup" Multiplicity="1" />
+          <End Role="JobLookup" Type="Self.JobLookup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScheduleTypeLookup">
+              <PropertyRef Name="ScheduleTypeId" />
+            </Principal>
+            <Dependent Role="JobLookup">
+              <PropertyRef Name="ScheduleTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AppIncidents" EntityType="Self.AppIncident" />
+          <EntitySet Name="ApplicationLookups" EntityType="Self.ApplicationLookup" />
+          <EntitySet Name="AppMonitorDatasets" EntityType="Self.AppMonitorDataset" />
+          <EntitySet Name="JobLookups" EntityType="Self.JobLookup" />
+          <EntitySet Name="ScheduleTypeLookups" EntityType="Self.ScheduleTypeLookup" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <AssociationSet Name="FK_AppIncidents_ApplicationLookup" Association="Self.FK_AppIncidents_ApplicationLookup">
+            <End Role="ApplicationLookup" EntitySet="ApplicationLookups" />
+            <End Role="AppIncidents" EntitySet="AppIncidents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppMonitorDataset_ApplicationLookup" Association="Self.FK_AppMonitorDataset_ApplicationLookup">
+            <End Role="ApplicationLookup" EntitySet="ApplicationLookups" />
+            <End Role="AppMonitorDataset" EntitySet="AppMonitorDatasets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobLookup_ApplicationLookup" Association="Self.FK_JobLookup_ApplicationLookup">
+            <End Role="ApplicationLookup" EntitySet="ApplicationLookups" />
+            <End Role="JobLookup" EntitySet="JobLookups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppMonitorDataset_AppMonitorDataset" Association="Self.FK_AppMonitorDataset_AppMonitorDataset">
+            <End Role="AppMonitorDataset" EntitySet="AppMonitorDatasets" />
+            <End Role="AppMonitorDataset1" EntitySet="AppMonitorDatasets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobLookup_ScheduleTypeLookup" Association="Self.FK_JobLookup_ScheduleTypeLookup">
+            <End Role="ScheduleTypeLookup" EntitySet="ScheduleTypeLookups" />
+            <End Role="JobLookup" EntitySet="JobLookups" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="App_MonitorModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="AppIncidents">
+            <EntityTypeMapping TypeName="App_MonitorModel.AppIncident">
+              <MappingFragment StoreEntitySet="AppIncidents">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="IncidentNumber" ColumnName="IncidentNumber" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="ScheduleTypeId" ColumnName="ScheduleTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApplicationLookups">
+            <EntityTypeMapping TypeName="App_MonitorModel.ApplicationLookup">
+              <MappingFragment StoreEntitySet="ApplicationLookup">
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="ApplicationName" ColumnName="ApplicationName" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppMonitorDatasets">
+            <EntityTypeMapping TypeName="App_MonitorModel.AppMonitorDataset">
+              <MappingFragment StoreEntitySet="AppMonitorDataset">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="JobID" ColumnName="JobID" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Runtime" ColumnName="Runtime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobLookups">
+            <EntityTypeMapping TypeName="App_MonitorModel.JobLookup">
+              <MappingFragment StoreEntitySet="JobLookup">
+                <ScalarProperty Name="ApplicationID" ColumnName="ApplicationID" />
+                <ScalarProperty Name="JobID" ColumnName="JobID" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="MaximumRuntime" ColumnName="MaximumRuntime" />
+                <ScalarProperty Name="ScheduleTypeId" ColumnName="ScheduleTypeId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScheduleTypeLookups">
+            <EntityTypeMapping TypeName="App_MonitorModel.ScheduleTypeLookup">
+              <MappingFragment StoreEntitySet="ScheduleTypeLookup">
+                <ScalarProperty Name="ScheduleTypeId" ColumnName="ScheduleTypeId" />
+                <ScalarProperty Name="ScheduleTypeName" ColumnName="ScheduleTypeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="App_MonitorModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -5,18 +5,18 @@ using System.Web.Mvc;
 
 namespace ApplicationMoniteringApplication.Controllers
 {
-    public interface IPatientRepository
-    {       
-        JsonResult GetFilteredData(string duration, string category);
-    }
+    //public interface IPatientRepository
+    //{       
+    //    JsonResult GetFilteredData(string duration, string category);
+    //}
     public class HomeController : Controller
     {
-        public readonly IPatientRepository mPatientRepository;
+        //public readonly IPatientRepository mPatientRepository;
 
-        public HomeController(IPatientRepository patientRepository)
-        {
-            mPatientRepository = patientRepository;
-        }
+        //public HomeController(IPatientRepository patientRepository)
+        //{
+        //    mPatientRepository = patientRepository;
+        //}
         public ActionResult Index()
         {
             return View();
@@ -185,7 +185,7 @@ namespace ApplicationMoniteringApplication.Controllers
                 return new JsonResult();
             }
             HomeBusiness homeBusiness = new HomeBusiness();
-            var filterData = homeBusiness.GetApplicationJobData(id,jobId, duration);
+            var filterData = homeBusiness.GetApplicationJobData(id, jobId, duration);
             return Json(filterData, JsonRequestBehavior.AllowGet);
         }
     }

@@ -9,10 +9,32 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
 {
     public class SqlGenericRepository
     {
+        public string UR_DataConnectionString;
+        public SqlGenericRepository()
+        {
+            string _UR_DataConnectionString = @"Data Source=(Localdb)\AppMonitor;Initial Catalog=App_Monitor;Integrated Security=True;";
+            UR_DataConnectionString = _UR_DataConnectionString;
+        }
+        //    public string abc = "Data Source=(Localdb)";
+        //    public string b = "/";
+        //    string c = "AppMonitor;Initial Catalog=App_Monitor;Integrated Security=True";
+        //    string bh = string.Concat(abc, b, c);
+        //}
+
         public List<IndexFilteredModel> GetLongestRuningJobs(string duration)
         {
             List<IndexFilteredModel> cmsList = new List<IndexFilteredModel>();
-            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            SqlConnection connection;
+            if (ConfigurationManager.ConnectionStrings["UR_DataConnectionString"] != null)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            }
+            else
+            {
+                //connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+                connection = new SqlConnection(UR_DataConnectionString);
+            }
+
             //string sql = "SELECT distinct ApplicationName,JobID, Runtime, ScheduleTypeId,Status FROM(select *,ROW_NUMBER() over (partition by ApplicationName order by Runtime DESC) rn from AppMonitorDataset)X where rn=1 and Status=1 and   ScheduleTypeId = " + duration + " and Runtime >  MaximumRuntime;";
             //string sql = "SELECT ApplicationName,JobName, Runtime, ScheduleTypeId,Status FROM( select al.ApplicationName,jl.JobName,jl.MaximumRuntime,amd.Runtime,jl.ScheduleTypeId,amd.Status,ROW_NUMBER() over(partition by amd.ApplicationID order by Runtime DESC) rn from AppMonitorDataset amd inner join ApplicationLookup al on amd.ApplicationID = al.ApplicationId inner join JobLookup jl on amd.JobID = jl.JobID )X where rn = 1 and Status = 1 and ScheduleTypeId =  " + duration + " and Runtime > MaximumRuntime; ";
 
@@ -48,7 +70,16 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
         public List<JobMonitorModel> GetApplicationJobData(string id, string jobId, string duration)
         {
             List<JobMonitorModel> cmsList = new List<JobMonitorModel>();
-            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            SqlConnection connection;
+            if (ConfigurationManager.ConnectionStrings["UR_DataConnectionString"] != null)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            }
+            else
+            {
+                //connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+                connection = new SqlConnection(UR_DataConnectionString);
+            }
             //string sql = "SELECT ApplicationName,IncidentNumber,Priority FROM App_Monitor.dbo.AppIncidents where priority <3  and ScheduleTypeId = " + duration + "  order by ApplicationName;";
             string sql = "SELECT al.ApplicationName,jl.JobID, amd.StartTime,amd.EndTime,amd.Status, amd.Runtime, amd.ErrorLog FROM  AppMonitorDataset  amd inner join ApplicationLookup al on amd.ApplicationID = al.ApplicationId inner join JobLookup jl on jl.JobID = amd.JobID WHERE Status = 0 and jl.ScheduleTypeId = " + duration + " and jl.ApplicationID = " + id + " and amd.JobID = '" + jobId + "'  order by amd.JobID  desc;";
             SqlCommand command = new SqlCommand(sql, connection);
@@ -84,7 +115,17 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
         public List<JobMonitorModel> GetJobData(string id, string duration)
         {
             List<JobMonitorModel> cmsList = new List<JobMonitorModel>();
-            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            SqlConnection connection;
+            if (ConfigurationManager.ConnectionStrings["UR_DataConnectionString"] != null)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            }
+            else
+            {
+                //connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+                connection = new SqlConnection(UR_DataConnectionString);
+            }
+
             //string sql = "SELECT ApplicationName,IncidentNumber,Priority FROM App_Monitor.dbo.AppIncidents where priority <3  and ScheduleTypeId = " + duration + "  order by ApplicationName;";
             string sql = "SELECT al.ApplicationName,jl.JobID, amd.StartTime,amd.EndTime,amd.Status, amd.Runtime,amd.ErrorLog FROM  AppMonitorDataset  amd inner join ApplicationLookup al on amd.ApplicationID = al.ApplicationId inner join JobLookup jl on jl.JobID = amd.JobID WHERE Status = 0 and jl.ScheduleTypeId = " + duration + " and jl.ApplicationID = " + id + " order by amd.JobID  desc;";
             SqlCommand command = new SqlCommand(sql, connection);
@@ -120,7 +161,16 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
         public List<IndexFilteredModel> GetHightCriticalIncidents(string duration)
         {
             List<IndexFilteredModel> cmsList = new List<IndexFilteredModel>();
-            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            SqlConnection connection;
+            if (ConfigurationManager.ConnectionStrings["UR_DataConnectionString"] != null)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            }
+            else
+            {
+                //connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+                connection = new SqlConnection(UR_DataConnectionString);
+            }
             //string sql = "SELECT ApplicationName,IncidentNumber,Priority FROM App_Monitor.dbo.AppIncidents where priority <3  and ScheduleTypeId = " + duration + "  order by ApplicationName;";
             string sql = "SELECT al.ApplicationName,ai.IncidentNumber,ai.Priority FROM App_Monitor.dbo.AppIncidents ai inner join ApplicationLookup al on ai.ApplicationId = al.ApplicationId where ai.priority < 3  and ai.ScheduleTypeId = " + duration + "  order by ai.ApplicationId; ";
             SqlCommand command = new SqlCommand(sql, connection);
@@ -153,7 +203,16 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
         public List<IndexFilteredModel> GetRecurringJobFailure(string duration)
         {
             List<IndexFilteredModel> cmsList = new List<IndexFilteredModel>();
-            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            SqlConnection connection;
+            if (ConfigurationManager.ConnectionStrings["UR_DataConnectionString"] != null)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            }
+            else
+            {
+                //connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+                connection = new SqlConnection(UR_DataConnectionString);
+            }
             //string sql = "WITH failure_counts AS(SELECT ApplicationName, JobID, COUNT(*) as failure_count from AppMonitorDataset where Status=0  and  ScheduleTypeId =" + duration + " group by ApplicationName,JobID) select top 5 t.ApplicationName,t.JobID,t.failure_count from failure_counts t INNER JOIN(SELECT MAX(failure_count) as max_failure_count from failure_counts) max_counts ON t.failure_count= max_counts.max_failure_count;";
             //string sql = "WITH failure_counts AS(SELECT ApplicationName, JobID, COUNT(*) as failure_count from AppMonitorDataset where Status = 0  and ScheduleTypeId = " + duration + " group by ApplicationName,JobID) SELECT distinct ApplicationName,JobID,failure_count FROM(select *, ROW_NUMBER() over (partition by ApplicationName order by failure_count DESC) rn from failure_counts )X where rn = 1; ";
             string sql = "WITH failure_counts AS(SELECT amd.ApplicationID,al.ApplicationName, amd.JobID,COUNT(*) as failure_count from AppMonitorDataset amd inner join ApplicationLookup al on amd.ApplicationID = al.ApplicationId inner join JobLookup jl on amd.JobID = jl.JobID where amd.Status = 0  and jl.ScheduleTypeId = " + duration + " group by amd.ApplicationID,al.ApplicationName, amd.JobID) SELECT top 5 ApplicationID, ApplicationName,JobID,failure_count FROM(select*, ROW_NUMBER() over (partition by ApplicationID order by failure_count DESC) rn from failure_counts )X where rn = 1; ";
@@ -188,7 +247,16 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
         public List<IndexFilteredModel> GetMaxFailureApp(object duration)
         {
             List<IndexFilteredModel> cmsList = new List<IndexFilteredModel>();
-            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            SqlConnection connection;
+            if (ConfigurationManager.ConnectionStrings["UR_DataConnectionString"] != null)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            }
+            else
+            {
+                //connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+                connection = new SqlConnection(UR_DataConnectionString);
+            }
             //string sql = "SELECT DISTINCT ApplicationName, COUNT(JobID) as NumberOfFailures FROM AppMonitorDataset WHERE  Status = 0 and  ScheduleTypeId =" + duration + " group by  ApplicationName order by NumberOfFailures desc";
             string sql = "SELECT top 5 jl.ApplicationID, al.ApplicationName,COUNT(amd.JobID) as NumberOfFailures FROM  AppMonitorDataset  amd inner join ApplicationLookup al on amd.ApplicationID = al.ApplicationId inner join JobLookup jl on jl.JobID = amd.JobID WHERE Status = 0 and jl.ScheduleTypeId = " + duration + " group by jl.ApplicationID,al.ApplicationName order by NumberOfFailures desc;";
             SqlCommand command = new SqlCommand(sql, connection);
@@ -221,7 +289,16 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
         public List<IncidentModel> GetIncidentData(string id)
         {
             List<IncidentModel> cmsList = new List<IncidentModel>();
-            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            SqlConnection connection;
+            if (ConfigurationManager.ConnectionStrings["UR_DataConnectionString"] != null)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+            }
+            else
+            {
+                //connection = new SqlConnection(ConfigurationManager.ConnectionStrings["UR_DataConnectionString"].ToString());
+                connection = new SqlConnection(UR_DataConnectionString);
+            }
             //string sql = "SELECT DISTINCT ApplicationName, COUNT(JobID) as NumberOfFailures FROM AppMonitorDataset WHERE  Status = 0 and  ScheduleTypeId =" + duration + " group by  ApplicationName order by NumberOfFailures desc";
             string sql = "SELECT al.ApplicationName,ai.IncidentNumber,ai.Title,ai.Detail,ai.CreatedOn,ai.CreatedBy,ai.Priority FROM App_Monitor.dbo.AppIncidents ai inner join ApplicationLookup al on ai.ApplicationId = al.ApplicationId where ai.IncidentNumber = '" + id + "' ; ";
             SqlCommand command = new SqlCommand(sql, connection);
@@ -233,7 +310,7 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
                 while (reader.Read())
                 {
                     IncidentModel records = new IncidentModel();
-                    records.IncidentName= reader["IncidentNumber"].ToString() ;
+                    records.IncidentName = reader["IncidentNumber"].ToString();
                     records.ApplicationName = reader["ApplicationName"].ToString();
                     records.Priority = reader["Priority"].ToString();
                     records.Details = reader["Detail"].ToString();
@@ -253,6 +330,7 @@ namespace ApplicationMoniteringApplication.DatabaseLayer
             }
             return cmsList;
         }
+
 
     }
 }

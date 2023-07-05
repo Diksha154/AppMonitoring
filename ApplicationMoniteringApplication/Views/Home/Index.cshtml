@@ -1,380 +1,13 @@
 ﻿@model IEnumerable<ApplicationMoniteringApplication.Models.IndexFilteredModel>
 
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
 
-<!-- Bootstrap core JavaScript-->
-<script src=" https://datatables.net/download/index"></script>
-<!-- Page level plugin JavaScript-->
-<link rel="stylesheet" type="text/css" href="https://datatables.net/download/index" />
-<script type="text/javascript" src="https://datatables.net/download/index"></script>
-
-@{
-    ViewBag.Title = "Home Page";
-}
-
-<style>
-    /*#tblLongRunJob {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-        #tblLongRunJob td, #tblLongRunJob th {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        #tblLongRunJob tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #tblLongRunJob tr:hover {
-            background-color: #ddd;
-        }
-
-        #tblLongRunJob th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #04AA6D;
-            color: white;
-        }
-    #tblMaxAppFailure {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-        #tblMaxAppFailure td, #tblMaxAppFailure th {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        #tblMaxAppFailure tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #tblMaxAppFailure tr:hover {
-            background-color: #ddd;
-        }
-
-        #tblMaxAppFailure th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #04AA6D;
-            color: white;
-        }
-    #tblRecurringJobFailure {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-        #tblRecurringJobFailure td, #tblRecurringJobFailure th {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        #tblRecurringJobFailure tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #tblRecurringJobFailure tr:hover {
-            background-color: #ddd;
-        }
-
-        #tblRecurringJobFailure th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #04AA6D;
-            color: white;
-        }
-    #tblPriorityIncident {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-        #tblPriorityIncident td, #tblPriorityIncident th {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        #tblPriorityIncident tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }*/
-
-    /* #tblPriorityIncident tr:hover {
-            background-color: #ddd;
-        }*/
-
-    /*#tblPriorityIncident th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #04AA6D;
-            color: white;
-        }*/
-
-    .table {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-        .table td, .table th {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        .table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        /* #tblPriorityIncident tr:hover {
-            background-color: #ddd;
-        }*/
-
-        .table th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #04AA6D;
-            color: white;
-        }
-
-    #incidentModalHeader {
-        background-color: #04AA6D;
-        color: white;
-    }
-    td.pointer {
-        text-decoration: underline;
-        cursor: pointer;
-        color: seagreen;
-    }
-        td.pointer:hover {
-            color: #076d34;
-        }
-        /*#exampleModalLongTitle{
-            margin-left:40%;
-        }*/
-</style>
-
-
-<div style="margin-top:10px">
-    <div class="col-md-12">
-        <div class="panel panel-success">
-            @*<div class="panel-heading">
-                    <h3 class="panel-title">Please select category & duration.</h3>
-                </div>*@
-            <div class="panel-body">
-                <div class="form-group col-md-5">
-                    <label>Category : </label>
-                    <select name="Category" id="Category" class="form-control">
-                        <option value="0">Please Select</option>
-                        <option value="1">Applications with longest running job</option>
-                        <option value="2">Applications with maximum number of failures</option>
-                        <option value="3">Maximum number of recurring job failures</option>
-                        <option value="4">P1/P2 incidents</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-5">
-                    <label>Duration : </label>
-                    <select name="Duration" id="Duration" class="form-control">
-                        <option value="0">Please Select</option>
-                        <option value="1">Daily</option>
-                        <option value="2">Weekly</option>
-                        <option value="3">Monthly</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-2">
-                    <div style="float: unset; display: inline-block; margin-top: 25px; ">
-                        <input class="btn" name="submitButton" id="btnSave" value="Filter" type="button" style="background-color: #04AA6D; color: white; font-size: 14px; ">
-                    </div>
-                </div>
-            </div>
-        </div><hr />
-        @*<div id="notFound" hidden>
-                <span>No record  found</span>
-            </div>*@
-        <table id="tblLongRunJob" class="table table-bordered table-striped table-responsive table-hover" hidden>
-            <thead>
-                <tr>
-                    <th align="left" class="productth">Application Name</th>
-                    <th align="left" class="productth">Job Name</th>
-                    <th align="left" class="productth">Runtime</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <table id="tblMaxAppFailure" class="table table-bordered table-striped table-responsive table-hover" hidden>
-            <thead>
-                <tr>
-                    <th align="left" class="productth" hidden>Application No.</th>
-                    <th align="left" class="productth">Application Name</th>
-                    <th align="left" class="productth">No of Failure</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <table id="tblRecurringJobFailure" class="table table-bordered table-striped table-responsive table-hover" hidden>
-            <thead>
-                <tr>
-                    <th align="left" class="productth" hidden>Application No.</th>
-                    <th align="left" class="productth">Application Name</th>
-                    <th align="left" class="productth">Job Name</th>
-                    <th align="left" class="productth">No of Failure</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <table id="tblPriorityIncident" class="table table-bordered table-striped table-responsive table-hover" hidden>
-            <thead>
-                <tr>
-                    <th align="left" class="productth">Application Name</th>
-                    <th align="left" class="productth">Incidents</th>
-                    <th align="left" class="productth">Priority</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <!--Modal PopUp-->
-        <!--<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-
-                <div class="modal-header alert alert-success">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel"></h4>
-                </div>
-                <div class="modal-body">
-                    <p class="success-message"> </p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-success delete-confirm"></button>-->
-        @*<button class="btn btn-default" data-dismiss="modal">@Resource.Cancel</button>*@
-        <!--</div>
-                </div>
-            </div>
-        </div>-->
-        <table id="tblJobDetails" class="table table-bordered table-striped table-responsive table-hover" hidden>
-            <thead>
-                <tr>
-                    <th align="left" class="productth">Application Name</th>
-                    <th align="left" class="productth">Job Name</th>
-                    <th align="left" class="productth">Start Time</th>
-                    <th align="left" class="productth">End Time</th>
-                    <th align="left" class="productth">RunTime</th>
-                    <th align="left" class="productth">Error Message</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <div class="modal fade" id="incidentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" id="incidentModalHeader">
-                        <h3 class="modal-title" id="exampleModalLongTitle">Incident Detail</h3>
-                        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>*@
-                    </div>
-                    <div class="modal-body">
-                        <div class="container-fluid" id="details">
-                            <div class="row">
-                                <b>
-                                    <div class="col-md-12" id="incidentName" style="color:green"></div>
-                                </b>
-                            </div>
-                            <div class="row">
-                                <b>
-                                    <div class="col-md-12" id="title" style="color: green"></div>
-                                </b>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">Application Name</div>
-                                <div class="col-md-4" id="appName"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">Incident Detail</div>
-                                <div class="col-md-6" id="incidentDetail"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">Priority</div>
-                                <div class="col-md-4" id="priority"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">Created On</div>
-                                <div class="col-md-4" id="createdOn"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">Created By</div>
-                                <div class="col-md-4" id="createdBy"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @*<div class="modal fade" id="jobDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3 class="modal-title" id="jobsDetail">Jobs Detail</h3>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container-fluid" id="details">
-                                <table id="jobDetail" class="table table-bordered table-striped table-responsive table-hover" hidden>
-                                    <thead>
-                                        <tr>
-                                            <th align="left" class="productth">Application Name</th>
-                                            <th align="left" class="productth">JobName</th>
-                                            <th align="left" class="productth">Start Time</th>
-                                            <th align="left" class="productth">End Time</th>
-                                            <th align="left" class="productth">Status</th>
-                                            <th align="left" class="productth">Error Message</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-
-        @*<div id='myModal' class='modal'>
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div id='myModalContent'></div>
-                    </div>
-                </div>
-
-            </div>*@
-    </div>
-
-
-    <script type="text/javascript" language=javascript>
-        $(document).ready(function () {
-           // $('#tblJobDetails').DataTable();
-        $("#btnSave").click(function () {
+         $("#btnSave").click(function () {
             var duration = $(Duration).val();
             var category = $(Category).val();
             $.ajax({
@@ -385,11 +18,13 @@
                 contentType: "application/json; charset=utf-8",
 
                 success: function (data) {
+                    $('#tblJobDetails_wrapper').remove();
                     $("#tblLongRunJob").find('tbody').find('tr').remove();
                     $("#tblMaxAppFailure").find('tbody').find('tr').remove();
                     $('#tblRecurringJobFailure').find('tbody').find('tr').remove();
                     $('#tblPriorityIncident').find('tbody').find('tr').remove();
                     $('#tblJobDetails').hide();
+
                     var items = '';
                         $.each(data, function (i, item) {
                             $('#notFound').hide();
@@ -444,7 +79,7 @@
                                 var rows = "<tr>"
                                     + "<td class='prtoducttd'>" + item.ApplicationName + "</td>"
                                     //+ "< a href = '#' onClick = 'window.open('http://www.w3schools.com','_blank','toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");return false">Link text</a>"
-                                    + "<td class='clickable-td'>" + item.JobName + "</td>"
+                                    + "<td class='pointer'>" + item.JobName + "</td>"
                                     //+ "<asp:LinkButton ID='Incident' runat = 'server' OnClick = 'LinkButton1_Click' >" + item.JobName + "</asp:LinkButton>"
                                     + "<td class='prtoducttd'>" + item.FilterOn + "</td>"
                                     + "</tr>";
@@ -469,6 +104,101 @@
             return false;
         });
 
+            $(document).on('click', '#tblMaxAppFailure tr', function () {
+            var tableData = $(this).children("td").map(function () {
+                return $(this).text();
+            }).get();
+            var duration = $(Duration).val();
+            var options = { "backdrop": "static", keyboard: true };
+             $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetJobData")',
+                 data: { Id: $.trim(tableData[0]), Duration: duration },
+                dataType: "json",
+                 contentType: "application/json; charset=utf-8",
+                 success: function (data) {
+                     debugger;
+                     //$("#tblJobDetails").find('tbody').find('tr').remove();
+                     $('#tblJobDetails_wrapper').remove();
+                     //$("#tblJobDetails").remove();
+
+
+                     var table_struct = "<table id='tblJobDetails'><thead><tr><th >Application Name</th><th>Job Name</th><th>Start Time</th><th >End Time</th><th >RunTime</th><th >Error Message</th></tr></thead ><tbody>";
+                     var rows="";
+                     $.each(data, function (i, item) {
+                         //debugger;
+
+                         var row = "<tr>"
+                             + "<td >" + item.ApplicationName + "</td>"
+                             + "<td  >" + item.JobName + "</td>"
+                             + "<td   >" + item.StartTime + "</td>"
+                             + "<td  >" + item.EndTime + "</td>"
+                             + "<td  >" + item.Runtime + "</td>"
+                             + "<td   >" + item.ErrorDetails + "</td>"
+                             + "</tr>";
+
+                         rows = rows + row;
+
+                     });
+                     var tbl = "</tbody></table > ";
+                     var result = table_struct + rows + tbl;
+                     $('.col-md-12').append(result);
+                     //$('#tblJobDetails').show();
+                     new DataTable('#tblJobDetails');
+                 },
+                 error: function () {
+                     $('#tblJobDetails').hide();
+                 }
+             });
+            });
+
+        $(document).on('click', '#tblRecurringJobFailure tr', function () {
+            var tableData = $(this).children("td").map(function () {
+                return $(this).text();
+            }).get();
+            var duration = $(Duration).val();
+            var options = { "backdrop": "static", keyboard: true };
+             $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetApplicationJobData")',
+                 data: { Id: $.trim(tableData[0]), JobId: $.trim(tableData[2]), Duration: duration },
+                dataType: "json",
+                 contentType: "application/json; charset=utf-8",
+                 success: function (data) {
+                     debugger;
+                     //$("#tblJobDetails").find('tbody').find('tr').remove();
+                     $('#tblJobDetails_wrapper').remove();
+                     //$("#tblJobDetails").remove();
+
+
+                     var table_struct = "<table id='tblJobDetails'><thead><tr><th >Application Name</th><th>Job Name</th><th>Start Time</th><th >End Time</th><th >RunTime</th><th >Error Message</th></tr></thead ><tbody>";
+                     var rows = "";
+                     $.each(data, function (i, item) {
+                         //debugger;
+
+                         var row = "<tr>"
+                             + "<td >" + item.ApplicationName + "</td>"
+                             + "<td  >" + item.JobName + "</td>"
+                             + "<td   >" + item.StartTime + "</td>"
+                             + "<td  >" + item.EndTime + "</td>"
+                             + "<td  >" + item.Runtime + "</td>"
+                             + "<td   >" + item.ErrorDetails + "</td>"
+                             + "</tr>";
+
+                         rows = rows + row;
+
+                     });
+                     var tbl = "</tbody></table > ";
+                     var result = table_struct + rows + tbl;
+                     $('.col-md-12').append(result);
+                     //$('#tblJobDetails').show();
+                     new DataTable('#tblJobDetails');
+                 },
+                 error: function () {
+                     $('#tblJobDetails').hide();
+                 }
+             });
+        });
 
         $(document).on('click', '#tblPriorityIncident tr', function () {
             var tableData = $(this).children("td").map(function () {
@@ -483,7 +213,6 @@
                  contentType: "application/json; charset=utf-8",
                  success: function (data) {
                      $.each(data, function (i, item) {
-                     debugger;
                      document.getElementById("appName").innerHTML = item.ApplicationName;
                      document.getElementById("incidentName").innerHTML = item.IncidentName;
                      document.getElementById("incidentDetail").innerHTML = item.Details;
@@ -500,74 +229,173 @@
              });
         });
 
-        $(document).on('click', '#tblMaxAppFailure tr', function () {
-            var tableData = $(this).children("td").map(function () {
-                return $(this).text();
-            }).get();
-            var duration = $(Duration).val();
-            var options = { "backdrop": "static", keyboard: true };
-             $.ajax({
-                type: "GET",
-                url: '@Url.Action("GetJobData")',
-                 data: { Id: $.trim(tableData[0]), Duration: duration },
-                dataType: "json",
-                 contentType: "application/json; charset=utf-8",
-                 success: function (data) {
-                     $("#tblJobDetails").find('tbody').find('tr').remove();
-                     $('#tblJobDetails').show();
-
-                     $.each(data, function (i, item) {
-                         debugger;
-                         var rows = "<tr>"
-                             + "<td class='prtoducttd'>" + item.ApplicationName + "</td>"
-                             + "<td class='prtoducttd'>" + item.JobName + "</td>"
-                             + "<td class='prtoducttd' >" + item.StartTime + "</td>"
-                             + "<td class='prtoducttd'>" + item.EndTime + "</td>"
-                             + "<td class='prtoducttd'>" + item.Runtime + "</td>"
-                             + "<td class='prtoducttd' >" + item.ErrorDetails + "</td>"
-                             + "</tr>";
-                         $('#tblJobDetails tbody').append(rows);
-                     });
-                 },
-                 error: function () {
-                     $('#tblJobDetails').hide();
-                 }
-             });
-        });
-
-        $(document).on('click', '#tblRecurringJobFailure tr', function () {
-            var tableData = $(this).children("td").map(function () {
-                return $(this).text();
-            }).get();
-            var duration = $(Duration).val();
-            var options = { "backdrop": "static", keyboard: true };
-             $.ajax({
-                type: "GET",
-                url: '@Url.Action("GetApplicationJobData")',
-                 data: { Id: $.trim(tableData[0]), JobId: $.trim(tableData[2]), Duration: duration },
-                dataType: "json",
-                 contentType: "application/json; charset=utf-8",
-                 success: function (data) {
-                     $("#tblJobDetails").find('tbody').find('tr').remove();
-                     $('#tblJobDetails').show();
-
-                     $.each(data, function (i, item) {
-                         debugger;
-                         var rows = "<tr>"
-                             + "<td class='prtoducttd'>" + item.ApplicationName + "</td>"
-                             + "<td class='prtoducttd'>" + item.JobName + "</td>"
-                             + "<td class='prtoducttd' >" + item.StartTime + "</td>"
-                             + "<td class='prtoducttd'>" + item.EndTime + "</td>"
-                             + "<td class='prtoducttd'>" + item.Runtime + "</td>"
-                             + "<td class='prtoducttd' >" + item.ErrorDetails + "</td>"
-                             + "</tr>";
-                         $('#tblJobDetails tbody').append(rows);
-                     });
-                 },
-                 error: function () {
-                     $('#tblJobDetails').hide();
-                 }
-             });
-        });
     });
-    </script>
+</script>
+
+<style>
+   
+    .table {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .table td, .table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+
+    #incidentModalHeader {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    .pointer {
+        text-decoration: underline;
+        cursor: pointer;
+        color: seagreen;
+    }
+
+       .pointer:hover {
+            color: #076d34;
+        }
+</style>
+
+<div style="margin-top:10px">
+    <div class="col-md-12">
+        <div class="panel panel-success">
+            @*<div class="panel-heading">
+                    <h3 class="panel-title">Please select category & duration.</h3>
+                </div>*@
+            <div class="panel-body">
+                <div class="form-group col-md-5">
+                    <label>Category : </label>
+                    <select name="Category" id="Category" class="form-control">
+                        <option value="0">Please Select</option>
+                        <option value="1">Applications with longest running job</option>
+                        <option value="2">Applications with maximum number of failures</option>
+                        <option value="3">Maximum number of recurring job failures</option>
+                        <option value="4">P1/P2 incidents</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-5">
+                    <label>Duration : </label>
+                    <select name="Duration" id="Duration" class="form-control">
+                        <option value="0">Please Select</option>
+                        <option value="1">Daily</option>
+                        <option value="2">Weekly</option>
+                        <option value="3">Monthly</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <div style="float: unset; display: inline-block; margin-top: 25px; ">
+                        <input class="btn" name="submitButton" id="btnSave" value="Filter" type="button" style="background-color: #04AA6D; color: white; font-size: 14px; ">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table id="tblMaxAppFailure" class="table table-bordered table-striped table-responsive table-hover" hidden>
+            <thead>
+                <tr>
+                    <th align="left" class="productth" hidden>Application No.</th>
+                    <th align="left" class="productth">Application Name</th>
+                    <th align="left" class="productth">No of Failure</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <table id="tblLongRunJob" class="table table-bordered table-striped table-responsive table-hover" hidden>
+            <thead>
+                <tr>
+                    <th align="left" class="productth">Application Name</th>
+                    <th align="left" class="productth">Job Name</th>
+                    <th align="left" class="productth">Runtime</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <table id="tblPriorityIncident" class="table table-bordered table-striped table-responsive table-hover" hidden>
+            <thead>
+                <tr>
+                    <th align="left" class="productth">Application Name</th>
+                    <th align="left" class="productth pointer">Incidents</th>
+                    <th align="left" class="productth">Priority</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <table id="tblRecurringJobFailure" class="table table-bordered table-striped table-responsive table-hover" hidden>
+            <thead>
+                <tr>
+                    <th align="left" class="productth" hidden>Application No.</th>
+                    <th align="left" class="productth">Application Name</th>
+                    <th align="left" class="productth">Job Name</th>
+                    <th align="left" class="productth">No of Failure</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+    </div>
+    <div class="modal fade" id="incidentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="incidentModalHeader">
+                    <h3 class="modal-title" id="exampleModalLongTitle">Incident Detail</h3>                   
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid" id="details">
+                        <div class="row">
+                            <b>
+                                <div class="col-md-12" id="incidentName" style="color:green"></div>
+                            </b>
+                        </div>
+                        <div class="row">
+                            <b>
+                                <div class="col-md-12" id="title" style="color: green"></div>
+                            </b>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Application Name</div>
+                            <div class="col-md-4" id="appName"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Incident Detail</div>
+                            <div class="col-md-6" id="incidentDetail"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Priority</div>
+                            <div class="col-md-4" id="priority"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Created On</div>
+                            <div class="col-md-4" id="createdOn"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Created By</div>
+                            <div class="col-md-4" id="createdBy"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

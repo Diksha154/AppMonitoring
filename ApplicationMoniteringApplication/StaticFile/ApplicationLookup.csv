@@ -1,0 +1,8 @@
+ApplicationId,ApplicationName,Owner,Description,Active
+1,AccountPayable,Hari,"""Application is using to run/control account payable's jobs""",1
+2,AGI,Ram,"""Application is using to run/control AGI's jobs""",1
+3,CGL,Shiva,"""Application is using to run/control CGI's jobs""",1
+4,HyperionEssbase,Mohan,"""Application is using to run/control hyperion essbase's jobs""",1
+5,CVA,Gauri,"""Application is using to run/control CVA's jobs""",1
+6,Murex,Kartik,"""Application is using to run/control murex's jobs""",1
+7,Reporting,Naina,"""Application is using to run/control reporting's jobs""",1

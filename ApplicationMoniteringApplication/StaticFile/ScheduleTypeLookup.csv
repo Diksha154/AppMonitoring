@@ -1,0 +1,4 @@
+ScheduleTypeId,ScheduleTypeName,Description
+1,Daily,"""Daily scheduled type"""
+2,Weekly,"""Weekly scheduled type"""
+3,Monthly,"""Monthly scheduled type"""
